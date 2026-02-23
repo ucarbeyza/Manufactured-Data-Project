@@ -1,0 +1,23 @@
+import duckdb
+import matplotlib.pyplot as plt
+
+csv_yolu = 'c:/Users/Lenovo/Desktop/e-ticaret-analizi/satislar.csv'
+sql_sorgusu = f"""
+SELECT tarih, SUM(tutar) OVER (ORDER BY tarih) as toplam_gelir
+FROM '{csv_yolu}'
+"""
+data = duckdb.query(sql_sorgusu).df()
+
+plt.figure(figsize=(10, 6)) # Grafiğin boyutu
+plt.plot(data['tarih'], data['toplam_gelir'], marker='o', color='b', linestyle='-')
+
+plt.title('Zaman İçinde Toplam Gelir Artışı', fontsize=14)
+plt.xlabel('Tarih', fontsize=12)
+plt.ylabel('Toplam Gelir (TL)', fontsize=12)
+plt.grid(True, linestyle='--', alpha=0.7)
+plt.xticks(rotation=45) 
+
+plt.tight_layout()
+plt.savefig('c:/Users/Lenovo/Desktop/e-ticaret-analizi/satis_grafigi.png') # Dosya olarak kaydeder
+print("✅ Grafik 'satis_grafigi.png' olarak kaydedildi!")
+plt.show()
